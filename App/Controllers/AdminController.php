@@ -8,6 +8,7 @@ use App\Core\View as V;
 class AdminController{
 
     public static function home_admin(){
+        phpinfo();
         echo "ea ea ea";
     }
 }

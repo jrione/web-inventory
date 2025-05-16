@@ -10,9 +10,7 @@ class View{
             require $file;
         }
         else{
-            var_dump($file);
-            var_dump(BASE_PATH);
-            Route::not_found();
+            return Route::not_found();
         }
     }
 }

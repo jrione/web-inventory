@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Ingress
+metadata:
+  labels:
+    app: web-inventory
+  name: web-inventory
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: web-inventory.jri.one
+    http:
+      paths:
+      - backend:
+          service:
+            name: web-inventory
+            port:
+              number: 80
+        path: /
+        pathType: Prefix

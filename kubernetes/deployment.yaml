@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: web-inventory
+  name: web-inventory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web-inventory
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: web-inventory
+    spec:
+      containers:
+      - image: registry.jri.one/web-inventory/web-inventory:v0.0.1
+        name: web-inventory
+        ports:
+        - containerPort: 80
+        resources: {}
+      volumes:
+      - name: web-inventory-env
+        secret:
+          secretName: web-inventory-env
+      - name: session-store
+        persistentVolumeClaim:
+          claimName: session-store

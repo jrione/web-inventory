@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  creationTimestamp: null
+  labels:
+    app: web-inventory
+  name: session-store
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  volumeName: session-store
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  creationTimestamp: null
+  labels:
+    app: web-inventory
+  name: session-store
+spec:
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  nfs:
+    path: /mnt/data/session-store
+    server: <<NFS_SERVER>>
+  persistentVolumeReclaimPolicy: Retain
