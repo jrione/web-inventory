@@ -24,7 +24,6 @@ class Helper{
         if(!empty($validatePayload)){
             return Route::bad_request();
         }
-        
         return $decoded;
     }
 

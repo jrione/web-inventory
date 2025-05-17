@@ -13,7 +13,7 @@ CREATE TABLE tb_inventory (
     `harga_beli` DOUBLE(20,2),
     `status_barang` BOOLEAN default false,
     `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-    `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+    `updated_at` timestamp NOT NULL D/EFAULT current_timestamp() ON UPDATE current_timestamp()
 );
 
 
