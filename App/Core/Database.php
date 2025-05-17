@@ -15,7 +15,9 @@ class Database{
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         $stmt = $pdo->prepare($q);
-        return $stmt->execute($where);
-        // return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        if($stmt->execute($where)){
+            return $stmt;
+        }
+        return false;
     }
 }

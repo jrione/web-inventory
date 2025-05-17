@@ -37,6 +37,7 @@ class Route {
     public static function not_found(){
         http_response_code(404);
         echo "404 Not Found";
+        exit();
     }
 
     public static function bad_request($msg=''){
@@ -47,10 +48,24 @@ class Route {
         else{
             echo "400 Bad Request";
         }
+        
+        exit();
+    }
+
+    public static function unauthorized($msg=''){
+        http_response_code(401);
+        if(!empty($msg)){
+            echo $msg;
+        }
+        else{
+           echo "401 Unauthorized";
+        }
+        exit();
     }
 
     public static function internal_error($err){
         http_response_code(500);
-        echo "Unexpected Error: ".$err;
+        echo $err;
+        exit();
     }
 }

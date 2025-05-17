@@ -38,13 +38,40 @@ class Helper{
         switch($err_code){
             case 400:
                return Route::bad_request($data);
+            case 401:
+                return Route::unauthorized($data);
             case 500:
                 return Route::internal_error($data);
             default:
                 echo $data;
         }
         
-        
-       
+    }
+
+    public static function sessionCheck(){
+
+        if (!isset($_SESSION['username']) AND !isset($_SESSION['role'])) {
+            return Route::unauthorized();
+        }
+    }
+
+    public static function BasicAuth(){
+        header('Content-Type: application/json');
+        $data= array(
+            "username" => $_SERVER["PHP_AUTH_USER"],
+            "password" => $_SERVER["PHP_AUTH_PW"]
+        );
+
+        $q="SELECT username,password,roles FROM tb_user WHERE username=?";
+        $stmt = Database::queryRaw($q,[$data["username"]]);
+        if($stmt){
+            $dataValid = $stmt->fetch(\PDO::FETCH_ASSOC);
+            $isPasswordValid=password_verify($data['password'],$dataValid['password']);
+            if(!$isPasswordValid){
+                return Route::unauthorized(json_encode(["error" => "Unauthorized"]));
+            }
+            return $dataValid['roles'];
+            exit();
+        }
     }
 }

@@ -6,7 +6,7 @@ USE db_inventory;
 
 CREATE TABLE tb_inventory (
     `id_barang` INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `kode_barang` VARCHAR(20) NOT NULL,
+    `kode_barang` VARCHAR(20) NOT NULL UNIQUE,
     `nama_barang` VARCHAR(50) NOT NULL,
     `jumlah_barang` INT(10) DEFAULT 0,
     `satuan_barang` ENUM('kg','pcs','liter','meter') NOT NULL,

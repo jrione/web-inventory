@@ -7,9 +7,10 @@ Route::add('GET','/', 'IndexController@index');
 Route::add('GET','/login', 'IndexController@login');
 Route::add('GET','/register', 'IndexController@register');
 
-// Auth Route
+// Auth Route TASK:DONE
 Route::add('POST','/auth/login','AuthController@loginProccess');
 Route::add('POST','/auth/register','AuthController@registerProccess');
+Route::add('POST','/auth/logout','AuthController@logoutProccess');
 
 //Admin Route
 Route::add('GET','/admin/dashboard','AdminController@home_admin');
@@ -18,4 +19,5 @@ Route::add('GET','/admin/dashboard','AdminController@home_admin');
 Route::add('GET','/dashboard','AdminController@home_admin');
 
 //API Route
+Route::add('POST','/api/addBarang','ApiController@insertData');
 Route::add('GET','/api/users','ApiController@getAllUsers');
