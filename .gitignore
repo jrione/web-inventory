@@ -3,3 +3,5 @@ database.erd.json
 
 sessions/*
 !sessions/.gitkeep
+
+views/admin/index.php.old

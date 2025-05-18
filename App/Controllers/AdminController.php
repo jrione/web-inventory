@@ -22,6 +22,6 @@ class AdminController{
             "dataAllBarang" => $dataBarang
         ];
         V::render("header",self::$data);
-        V::render("admin/index-1",self::$data);
+        V::render("admin/index",self::$data);
     }
 }
