@@ -46,7 +46,7 @@ class ApiController{
             return H::returnDataJSON($dataValid);
         }
         else{
-            return H::returnDataJSON(["error" => "Unexpected Error"],500);
+            return H::returnDataJSON(["message" => "Unexpected Error"],500);
         }
         
     }
@@ -54,7 +54,7 @@ class ApiController{
     public static function getAllData(){
         $roles = H::BasicAuth();
         if($roles != "admin"){
-            return H::returnDataJSON(["error" => "Unauthorized"],401);
+            return H::returnDataJSON(["message" => "Unauthorized"],401);
             exit();
         }
         
@@ -65,7 +65,7 @@ class ApiController{
             return H::returnDataJSON($dataValid);
         }
         else{
-            return H::returnDataJSON(["error" => "Unexpected Error"],500);
+            return H::returnDataJSON(["message" => "Unexpected Error"],500);
         }
         
     }
@@ -74,7 +74,7 @@ class ApiController{
         self::$validPayload = array("where","dataUpdated");
         $roles = H::BasicAuth();
         if($roles != "admin"){
-            return H::returnDataJSON(["error" => "Unauthorized"],401);
+            return H::returnDataJSON(["message" => "Unauthorized"],401);
             exit();
         }
         $payload=H::receiveDataJSON(self::$validPayload);
@@ -94,18 +94,18 @@ class ApiController{
         try{
             DB::queryRaw($q);
         } catch(\PDOException $e){
-            $returnData = H::returnDataJSON(["unexpected_error" => $e->getMessage()],500);
+            $returnData = H::returnDataJSON(["message" => $e->getMessage()],500);
             return $returnData;
             exit();
         }
-        return H::returnDataJSON(["success" => "Data Berhasil diubah!"]);
+        return H::returnDataJSON(["message" => "Data Berhasil diubah!"]);
     }
 
     public static function deleteDataByID(){
         self::$validPayload = array("id_barang");
         $roles = H::BasicAuth();
         if($roles != "admin"){
-            return H::returnDataJSON(["error" => "Unauthorized"],401);
+            return H::returnDataJSON(["message" => "Unauthorized"],401);
             exit();
         }
         $payload=H::receiveDataJSON(self::$validPayload);
@@ -114,11 +114,11 @@ class ApiController{
         try{
             DB::queryRaw($q);
         } catch(\PDOException $e){
-            $returnData = H::returnDataJSON(["unexpected_error" => $e->getMessage()],500);
+            $returnData = H::returnDataJSON(["message" => $e->getMessage()],500);
             return $returnData;
             exit();
         }
-        return H::returnDataJSON(["success" => "Data Berhasil dihapus!"]);
+        return H::returnDataJSON(["message" => "Data Berhasil dihapus!"]);
 
     } 
 }

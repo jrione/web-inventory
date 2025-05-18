@@ -18,7 +18,7 @@ Route::add('GET','/user/dashboard','AdminController@home_admin');
 // Auth Route TASK:DONE
 Route::add('POST','/auth/login','AuthController@loginProccess');
 Route::add('POST','/auth/register','AuthController@registerProccess');
-Route::add('POST','/auth/logout','AuthController@logoutProccess');
+Route::add('GET','/auth/logout','AuthController@logoutProccess');
 
 //API barang TASK:DONE
 Route::add('POST','/api/barang/create','ApiController@insertData'); //admin

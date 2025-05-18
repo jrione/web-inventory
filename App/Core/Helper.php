@@ -56,7 +56,7 @@ class Helper{
 
     public static function adminCheck(){
         if($_SESSION['roles'] !== "admin"){
-            header("Location: ".BASE_URL."user/dashboard");
+            header("Location: ".BASE_URL."user/");
         }
     }
 
