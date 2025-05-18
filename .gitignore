@@ -1,4 +1,5 @@
 .env
 database.erd.json
-!sessions/.gitkeep
+
 sessions/*
+!sessions/.gitkeep
