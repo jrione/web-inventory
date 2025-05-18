@@ -6,4 +6,3 @@ document.getElementById('navbarToggle').addEventListener('click', function() {
         navbarMenu.classList.add('active');
     }
 });
-

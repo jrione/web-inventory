@@ -48,9 +48,15 @@ class Helper{
     }
 
     public static function sessionCheck(){
-
         if (!isset($_SESSION['username']) AND !isset($_SESSION['role'])) {
+            session_destroy();
             return Route::unauthorized();
+        }
+    }
+
+    public static function adminCheck(){
+        if($_SESSION['roles'] !== "admin"){
+            header("Location: ".BASE_URL."user/dashboard");
         }
     }
 

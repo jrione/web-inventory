@@ -25,6 +25,7 @@ class UserController{
     }
 
     public static function getUserById(){
+        $roles = H::BasicAuth();
         self::$validPayload = ["user_id"];
         $payload=H::receiveDataJSON(self::$validPayload);
         
@@ -40,6 +41,7 @@ class UserController{
     }
 
     public static function updateUser(){
+        $roles = H::BasicAuth();
         self::$validPayload = array("where","dataUpdated");
         $roles = H::BasicAuth();
         if($roles != "admin"){

@@ -27,14 +27,15 @@ class ApiController{
             DB::queryRaw($q,$dataBarang);
         } catch(\PDOException $e){
             ($e->getCode() == 23000)
-                ? $returnData = H::returnDataJSON(["error" => "Kode Barang Sudah Ada!"],400)
-                : $returnData = H::returnDataJSON(["unexpected_error" => $e->getMessage()],500);
+                ? $returnData = H::returnDataJSON(["message" => "Kode Barang Sudah Ada!"],400)
+                : $returnData = H::returnDataJSON(["message" => $e->getMessage()],500);
             return $returnData;
         }
         return H::returnDataJSON(["success" => "Barang Telah Ditambahkan"]);
     }
 
     public static function getDataByKode(){
+        $roles = H::BasicAuth();
         self::$validPayload = ["kode_barang"];
         $payload=H::receiveDataJSON(self::$validPayload);
         

@@ -35,6 +35,6 @@ Route::add('DELETE','/api/user/delete','UserController@deleteUser'); //admin
 
 //API user borrow
 Route::add('POST','/api/user/borrow/listAll','BorrowController@getAllBorrow'); //admin
-Route::add('POST','/api/user/borrow/list','BorrowController@getBorrow'); //admin
+Route::add('POST','/api/user/borrow/list','BorrowController@getBorrowById'); //admin
 Route::add('PATCH','/api/user/borrow/update','BorrowController@updateBorrow'); //user+admin
 Route::add('DELETE','/api/user/borrow/delete','BorrowController@deleteBorrow'); //admin

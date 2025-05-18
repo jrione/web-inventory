@@ -1,8 +1,8 @@
 # WEB PEMINJAMAN BARANG BERBASIS PHP NATIVE
 ### Tech stack:
 - PHP 7.4
-- Bootstrap 5 (soon)
-- Svelte (soon)
+- Bootstrap 5
+- JQuery 3.7
 
 
 ### HOW TO RUN:

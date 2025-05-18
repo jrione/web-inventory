@@ -9,7 +9,7 @@ class AuthController{
     private static $validLoginPayload = array("username","password");
 
     public static function loginProccess(){
-        
+        session_start();
 
         $data=H::receiveDataJSON(self::$validLoginPayload);
 
@@ -22,17 +22,17 @@ class AuthController{
                 if($isPasswordValid){
                     $_SESSION["username"] = $dataValid["username"];
                     $_SESSION["roles"] = $dataValid["roles"];
-                    $returnValue = H::returnDataJSON(["success" => "Sukses Login"]);
+                    $returnValue = H::returnDataJSON(["message" => "Sukses Login"]);
                 }
                 else{
-                    $returnValue = H::returnDataJSON(["error" => "Username atau Password Salah!"],401);
+                    $returnValue = H::returnDataJSON(["message" => "Username atau Password Salah!"],401);
                 }
             }
             else{
-                $returnValue = H::returnDataJSON(["error" => "Username atau Password Salah!"],401);
+                $returnValue = H::returnDataJSON(["message" => "Username atau Password Salah!"],401);
             }
         } catch(\PDOException $e){
-            $returnValue =  H::returnDataJSON(["unexpected_error" => $e->getMessage()],500);
+            $returnValue =  H::returnDataJSON(["message" => $e->getMessage()],500);
         }
         return $returnValue;
     }
@@ -51,12 +51,12 @@ class AuthController{
             DB::queryRaw($q,$dataValid);
         } catch(\PDOException $e){
             ($e->getCode() == 23000)
-                ? $returnData = H::returnDataJSON(["error" => "Username telah dipakai!"],400)
-                : $returnData = H::returnDataJSON(["unexpected_error" => $e->getMessage()],500);
+                ? $returnData = H::returnDataJSON(["message" => "Username telah dipakai!"],400)
+                : $returnData = H::returnDataJSON(["message" => $e->getMessage()],500);
             return $returnData;
         }
 
-        return H::returnDataJSON(["success" => "Berhasil Mendaftar"]);
+        return H::returnDataJSON(["message" => "Berhasil Mendaftar"]);
     }
 
     public static function logoutProccess(){
