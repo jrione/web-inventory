@@ -14,10 +14,10 @@ class ApiController{
             exit();
         }
         
-        self::$validPayload = array("kode_barang","nama_barang","jumlah_barang","satuan_barang","harga_beli");
+        self::$validPayload = array("kode_barang","nama_barang","jumlah_barang","satuan_barang","harga_beli","status_barang");
         $payload=H::receiveDataJSON(self::$validPayload);
 
-        $q="INSERT INTO tb_inventory(".implode(', ',self::$validPayload).") VALUE(?, ?, ?, ?, ?)";
+        $q="INSERT INTO tb_inventory(".implode(', ',self::$validPayload).") VALUE(?, ?, ?, ?, ?, ?)";
         $dataBarang= [];
         foreach($payload as $p){
             array_push($dataBarang,$p);
