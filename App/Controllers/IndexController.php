@@ -6,7 +6,6 @@ use App\Core\View as V;
 class IndexController{
     public static $data = ["title" => "JriOne's Inventory"];
     public static function index(){
-        phpinfo();
         V::render('header',$data);
         V::render('navbar');
         V::render('index');
