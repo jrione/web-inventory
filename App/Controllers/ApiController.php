@@ -80,7 +80,16 @@ class ApiController{
         $payload=H::receiveDataJSON(self::$validPayload);
         $update=[];
         foreach($payload["dataUpdated"] as $key => $val){
-            array_push($update,$key."='".$val."'");
+            if($key == "jumlah_barang"){
+                if(empty($val)){
+                    $val=0;
+                }
+                array_push($update,$key."=jumlah_barang + '".$val."'");
+            }
+            else{
+                array_push($update,$key."='".$val."'");
+            }
+            
         }
         $state=implode(", ", $update);
 

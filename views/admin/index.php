@@ -233,13 +233,18 @@
             'Authorization': 'Basic ' + btoa('<?= $_SESSION["username"] ?>:<?= $_SESSION['password'] ?>')
         },
         success: function(response) {
-
             let isAvail = "" ;
-            (response[0].status_barang === 1)
+            (response[0].status_barang == "1")
                 ? isAvail="Available"
                 : isAvail="Not Available"
-
-            Swal.fire({
+            const swalWithBootstrapButtons = Swal.mixin({
+              customClass: {
+                confirmButton: "btn btn-danger",
+                cancelButton: "btn btn-info"
+              },
+              buttonsStyling: true
+            });
+            swalWithBootstrapButtons.fire({
                 title: 'Detail Barang',
                 html: `
                     <table style="
@@ -289,8 +294,176 @@
                     </tbody>
                     </table>
                 `,
-                icon: 'info'
-                });
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonText: "<i class='fa fa-trash'></i>",
+                cancelButtonText: "<i class='fa fa-edit'></i>",
+                reverseButtons: true,
+                }).then((result) => {
+                if (result.isConfirmed) {
+                  swalWithBootstrapButtons.fire({
+                    title: "Konfirmasi",
+                    text: "Anda yakin ingin menghapusnya?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Ya",
+                    cancelButtonText:"Tidak"
+                  }).then(function(isConfirm) {
+                      if (isConfirm.isConfirmed) {
+                        $.ajax({
+                          url: '<?= BASE_URL ?>'+'api/barang/delete',
+                          type: 'DELETE',
+                          data: JSON.stringify({
+                            id_barang: response[0].id_barang
+                          }),
+                          headers: {
+                              'Authorization': 'Basic ' + btoa('<?= $_SESSION["username"] ?>:<?= $_SESSION['password'] ?>')
+                          },
+                          contentType: 'application/json',
+                          dataType: 'json',
+                          success: function(response) {
+                              Swal.fire({
+                                title: 'Perhatian',
+                                text: 'Data telah dihapus',
+                                icon: 'info'
+                              }).then(function(){
+                                window.location.reload();
+                              });
+                          },
+                          error: function(xhr, status, error) {
+                              let errorMessage = 'Terjadi kesalahan pada server';
+                              let errorDetails = '';
+                              
+                              try {
+                                  const response = JSON.parse(xhr.responseText);
+                                  console.log(response);
+                                  if (response.message) {
+                                      errorMessage = response.message;
+                                  }
+                                  if (response.errors) {
+                                      errorDetails = '<ul class="text-start">';
+                                      Object.keys(response.errors).forEach(key => {
+                                          errorDetails += `<li>${response.errors[key]}</li>`;
+                                      });
+                                      errorDetails += '</ul>';
+                                  }
+                              } catch (e) {
+                                  console.error('Error parsing JSON response:', e);
+                              }
+                              
+                              Swal.fire({
+                                  icon: 'error',
+                                  title: 'Gagal Menghapus',
+                                  html: errorMessage + (errorDetails ? errorDetails : ''),
+                                  confirmButtonText: 'Coba Lagi'
+                              });
+                          }
+                        });
+                      } else {
+                        console.log("batal")
+                      }
+                    });
+                } else if (
+                  result.dismiss === Swal.DismissReason.cancel
+                ) {
+                  swalWithBootstrapButtons.fire({
+                    title: "Update Barang",
+                    icon: "warning",
+                    showCancelButton: true,
+                    html: `
+                      <div class="p-4 rounded shadow-sm bg-white">
+                        <div class="mb-3">
+                          <label for="namaBarangUpdate" class="form-label">Nama Barang</label>
+                          <input type="text" class="form-control" id="namaBarangUpdate" value="${response[0].nama_barang}" required />
+                        </div>
+                        <div class="mb-3">
+                          <label for="kodeBarangUpdate" class="form-label">Kode Barang</label>
+                          <input type="text" class="form-control" id="kodeBarangUpdate" value="${response[0].kode_barang}" disabled required />
+                        </div>
+                        <div class="mb-3">
+                          <label for="jumlahUpdate" class="form-label">Jumlah (Hanya menambah) </label>
+                          <input type="number" class="form-control" id="jumlahUpdate" required />
+                        </div>
+                        <div class="mb-3">
+                          <label for="hargaBarangUpdate"  class="form-label">Harga Barang</label>
+                          <input type="text" class="form-control" id="hargaBarangUpdate" value="${parseInt(response[0].harga_beli)}"required />
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label">Status Barang</label><br>
+                          <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="statusBarangUpdate" id="statusTrue" value="1" required>
+                            <label class="form-check-label" for="statusTrue">Tersedia</label>
+                          </div>
+                          <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="statusBarangUpdate" id="statusFalse" value="0">
+                            <label class="form-check-label" for="statusFalse">Tidak Tersedia</label>
+                          </div>
+                        </div>
+                      </div>
+                  `
+                  }).then(function(isOK){
+                    if(isOK.isConfirmed){
+                      let formDataUpdate = {
+                        nama_barang: $("#namaBarangUpdate").val(),
+                        harga_beli: $("#hargaBarangUpdate").val(),
+                        status_barang: parseInt($('input[name="statusBarangUpdate"]:checked').val())
+                      }
+                      $.ajax({
+                        url: '<?= BASE_URL ?>'+'api/barang/update',
+                        type: 'PATCH',
+                        data: JSON.stringify({
+                          where: {
+                            id_barang: response[0].id_barang
+                          },
+                          dataUpdated: formDataUpdate
+                        }),
+                        headers: {
+                            'Authorization': 'Basic ' + btoa('<?= $_SESSION["username"] ?>:<?= $_SESSION['password'] ?>')
+                        },
+                        contentType: 'application/json',
+                        dataType: 'json',
+                        success: function(response) {
+                            Swal.fire({
+                              title: 'Perhatian',
+                              text: 'Data telah diupdate',
+                              icon: 'info'
+                            }).then(function(){
+                              window.location.reload();
+                            });
+                        },
+                        error: function(xhr, status, error) {
+                            let errorMessage = 'Terjadi kesalahan pada server';
+                            let errorDetails = '';
+                            
+                            try {
+                                const response = JSON.parse(xhr.responseText);
+                                console.log(response);
+                                if (response.message) {
+                                    errorMessage = response.message;
+                                }
+                                if (response.errors) {
+                                    errorDetails = '<ul class="text-start">';
+                                    Object.keys(response.errors).forEach(key => {
+                                        errorDetails += `<li>${response.errors[key]}</li>`;
+                                    });
+                                    errorDetails += '</ul>';
+                                }
+                            } catch (e) {
+                                console.error('Error parsing JSON response:', e);
+                            }
+                            
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal Mengupdate barang',
+                                html: errorMessage + (errorDetails ? errorDetails : ''),
+                                confirmButtonText: 'Coba Lagi'
+                            });
+                        }
+                      });
+                    }
+                  });
+                }
+              });
         },
         error: function(xhr, status, error) {
             console.error('Error:', error);
