@@ -9,8 +9,8 @@ class AdminController{
     public static $data = [];
     public static function home_admin(){
         session_start();
-        H::sessionCheck();
         H::adminCheck();
+        H::sessionCheck();
 
         $q="SELECT*FROM tb_inventory";
         $res = DB::queryRaw($q);

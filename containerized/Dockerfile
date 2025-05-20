@@ -18,6 +18,7 @@ RUN mkdir -p /var/www/html
 COPY containerized/nginx.conf /etc/nginx/nginx.conf
 COPY containerized/supervisord.conf /etc/supervisord.conf
 COPY . /var/www/html/
+COPY containerized/custom.ini /etc/php7/conf.d/99-custom.ini
 
 RUN chown -R nginx:nginx /var/www/html
 EXPOSE 80

@@ -60,6 +60,7 @@ class Route {
         else{
            echo "401 Unauthorized";
         }
+        exit();
     }
 
     public static function internal_error($err){
