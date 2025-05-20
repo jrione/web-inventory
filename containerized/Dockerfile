@@ -20,6 +20,9 @@ COPY containerized/supervisord.conf /etc/supervisord.conf
 COPY . /var/www/html/
 COPY containerized/custom.ini /etc/php7/conf.d/99-custom.ini
 
+RUN sed -i 's/user = nobody/user = nginx/' /etc/php7/php-fpm.d/www.conf
+RUN sed -i 's/group = nobody/group = nginx/' /etc/php7/php-fpm.d/www.conf
+
 RUN chown -R nginx:nginx /var/www/html
 
 EXPOSE 80
