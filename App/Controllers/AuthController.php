@@ -20,8 +20,8 @@ class AuthController{
                 $dataValid = $res->fetch(\PDO::FETCH_ASSOC);
                 $isPasswordValid=password_verify($data['password'],$dataValid['password']);
                 if($isPasswordValid){
-                    $_SESSION["username"] = $dataValid["username"];
-                    $_SESSION["password"] = $dataValid["password"];
+                    $_SESSION["username"] = $data["username"];
+                    $_SESSION["password"] = $data["password"];
                     $_SESSION["roles"] = $dataValid["roles"];
                     $returnValue = H::returnDataJSON(["message" => "Sukses Login"]);
                 }
