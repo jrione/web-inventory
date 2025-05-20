@@ -48,7 +48,7 @@ class Helper{
     }
 
     public static function sessionCheck(){
-        if (!isset($_SESSION['username']) AND !isset($_SESSION['role'])) {
+        if (!isset($_SESSION['username']) AND !isset($_SESSION['roles'])) {
             session_destroy();
             return Route::unauthorized();
         }
