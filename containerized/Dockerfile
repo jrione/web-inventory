@@ -21,5 +21,7 @@ COPY . /var/www/html/
 COPY containerized/custom.ini /etc/php7/conf.d/99-custom.ini
 
 RUN chown -R nginx:nginx /var/www/html
+RUN chmod -R 777 /var/www/html/sessions
+
 EXPOSE 80
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
