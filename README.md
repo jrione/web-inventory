@@ -5,6 +5,20 @@
 - JQuery 3.7
 - SweetAlert 2
 
+### DEMO
+Website: https://inventory.jri.one
+
+- admin:
+  ```
+  username: jrione
+  password: thispassword
+  ```
+- user:
+  ```
+  username: user
+  password: useruser
+  ```
+
 
 ### HOW TO RUN:
 1. Don't forget to adjust .env file
