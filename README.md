@@ -14,11 +14,11 @@
 3. Run Application
 - With Docker
 ```sh
-    docker run -d -p 8000:80 --name "testingg" web-inventory
+    docker run -d -p 8000:80 -v /mnt/img:/var/www/html/public/assets/img /mnt/sessions:/var/www/html/sessions --name "web-inventory" web-inventory 
 ```
 - With Kubernetes:
 ```
-    kubectl create secret generic --from-file=.env
+    kubectl create secret generic web-inventory-env --from-env-file=.env
     kubectl apply -f kubernetes/pv-pvc.yaml
     kubectl apply -f kubernetes/deployment.yaml
     kubectl apply -f kubernetes/service.yaml
