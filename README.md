@@ -3,6 +3,7 @@
 - PHP 7.4
 - Bootstrap 5
 - JQuery 3.7
+- SweetAlert 2
 
 
 ### HOW TO RUN:
