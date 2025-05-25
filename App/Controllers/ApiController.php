@@ -70,26 +70,36 @@ class ApiController{
         
     }
 
-    public static function updateDataBarang(){
-        self::$validPayload = array("where","dataUpdated");
-        $roles = H::BasicAuth();
-        if($roles != "admin"){
-            return H::returnDataJSON(["message" => "Unauthorized"],401);
-            exit();
-        }
-        $payload=H::receiveDataJSON(self::$validPayload);
+    public static function updateDataBarang($bypass=false,$payloadParams=[]){
         $update=[];
-        foreach($payload["dataUpdated"] as $key => $val){
-            if($key == "jumlah_barang"){
-                if(empty($val)){
-                    $val=0;
-                }
-                array_push($update,$key."=jumlah_barang + '".$val."'");
-            }
-            else{
-                array_push($update,$key."='".$val."'");
+
+        if(!$bypass){   
+            self::$validPayload = array("where","dataUpdated");
+            $roles = H::BasicAuth();
+            if($roles != "admin"){
+                return H::returnDataJSON(["message" => "Unauthorized"],401);
+                exit();
             }
             
+            $payload=H::receiveDataJSON(self::$validPayload);
+            foreach($payload["dataUpdated"] as $key => $val){
+                if($key == "jumlah_barang"){
+                    if(empty($val)){
+                        $val=0;
+                    }
+                    array_push($update,$key."=".$key."+".$val);
+                }
+                else{
+                    array_push($update,$key."='".$val."'");
+                }
+                
+            }
+        }
+        else{
+            $payload=$payloadParams;
+            foreach($payload["dataUpdated"] as $key => $val){
+                array_push($update,$key."='".$val."'");
+            }
         }
         $state=implode(", ", $update);
 

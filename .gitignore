@@ -4,4 +4,7 @@ database.erd.json
 sessions/*
 !sessions/.gitkeep
 
+public/assets/img
+!public/assets/img/default_profile.svg
+
 views/admin/index.php.old

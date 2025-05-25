@@ -27,8 +27,10 @@ class Helper{
         return $decoded;
     }
 
-    public static function returnDataJSON($arr,$err_code=0){
-        header('Content-Type: application/json');
+    public static function returnDataJSON($arr,$err_code=0,$isJSON=true){
+        if($isJSON){
+            header('Content-Type: application/json');
+        }
         $data ="";
         is_array($arr)
             ? $data = json_encode($arr, JSON_PRETTY_PRINT)
@@ -56,7 +58,7 @@ class Helper{
 
     public static function adminCheck(){
         if($_SESSION['roles'] !== "admin"){
-           header("Location: ".BASE_URL."user/");
+           header("Location: ".BASE_URL."user/dashboard");
         }
     }
 

@@ -33,7 +33,7 @@
 
     <ul class="nav nav-tabs mb-3" id="inventoryTabs" role="tablist">
       <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#barangTersedia">Barang Tersedia</a></li>
-      <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#barangDipinjam">Barang Dipinjam</a></li>
+      <li id="barangDipinjamMenu" class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#barangDipinjam">Barang Dipinjam</a></li>
       <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tambahBarang">Tambah Barang</a></li>
       <li id="listUserMenu" class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#listUser">Daftar User</a></li>
     </ul>
@@ -67,17 +67,7 @@
         ?>
         </div>
       </div>
-      
-      <div class="tab-pane fade" id="barangDipinjam">
-        <h5 class="mb-3">Barang yang Sedang Dipinjam</h5>
-        <ul class="list-group">
-          <li class="list-group-item" onclick="showPinjamDetail('Ari', 'Laptop Dell Latitude', '18 Mei 2025')">Laptop Dell Latitude - Ari</li>
-          <li class="list-group-item" onclick="showPinjamDetail('Budi', 'Monitor LG 24', '17 Mei 2025')">Monitor LG 24" - Budi</li>
-          <li class="list-group-item" onclick="showPinjamDetail('Citra', 'Mouse Wireless', '15 Mei 2025')">Mouse Wireless - Citra</li>
-          <li class="list-group-item" onclick="showPinjamDetail('Dewi', 'Keyboard Logitech', '16 Mei 2025')">Keyboard Logitech - Dewi</li>
-          <li class="list-group-item" onclick="showPinjamDetail('Eko', 'Webcam HD', '14 Mei 2025')">Webcam HD - Eko</li>
-        </ul>
-      </div>
+
 
       <!-- Tambah Barang -->
       <div class="tab-pane fade" id="tambahBarang">
@@ -140,6 +130,22 @@
           </tbody>
         </table>
       </div>
+
+      <div class="tab-pane fade" id="barangDipinjam">
+        <h5 class="mb-3" id="barangDipinjamMenu">Daftar Peminjam</h5>
+        <table class="table table-bordered table-hover bg-white">
+          <thead>
+            <tr>
+              <th>Barang Pinjaman</th>
+              <th>Peminjam</th>
+            </tr>
+          </thead>
+          <tbody id="showDataBorrow">
+            <!-- Blank, Autofill -->
+          </tbody>
+        </table>
+      </div>
+      
     </div>
   </div>
 
@@ -167,6 +173,90 @@
       }
     });
   })
+
+  $("#barangDipinjamMenu").on("click",function(){
+    $("#showDataBorrow").empty();
+    $.ajax({
+      url: '<?= BASE_URL ?>'+'api/user/borrow/listAll',
+      method: 'POST',
+      contentType: 'application/json',
+      headers: {
+          'Authorization': 'Basic ' + btoa('<?= $_SESSION["username"] ?>:<?= $_SESSION['password'] ?>')
+      },
+      success: function(response) {
+        console.log(response)
+        for(let i=0;i<response.length;i++){
+          const userObj = encodeURIComponent(JSON.stringify(response[i]));
+          $("#showDataBorrow").append(
+            `<tr onclick="showBorrowDetail(JSON.parse(decodeURIComponent('${userObj}')))">
+              <td>${response[i]['nama_barang']}</td>
+              <td>${response[i]['nama_peminjam']}</td>
+            </tr>`
+          );
+        }
+      }
+    });
+  });
+
+  function showBorrowDetail(data){
+    Swal.fire({
+      title: 'Detail Peminjam',
+      html: `<table style="
+                width: 80%; 
+                max-width: 400px; 
+                margin: 0 auto; 
+                border-collapse: collapse; 
+                font-family: Arial, sans-serif; 
+                font-size: 14px;
+                box-shadow: 0 0 5px rgba(0,0,0,0.1);
+                " border="1" cellpadding="6" cellspacing="0">
+                <thead style="background-color: #f0f0f0; color: #333;">
+                    <tr>
+                    <th align="left" style="padding: 8px;">Field</th>
+                    <th align="left" style="padding: 8px;">Detail</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                    <td style="padding: 6px;">Username</td>
+                    <td style="padding: 6px;">${data.username_peminjam}</td>
+                    </tr>
+                    <tr>
+                    <td style="padding: 6px;">Nama Lengkap</td>
+                    <td style="padding: 6px;">${data.nama_peminjam}</td>
+                    </tr>
+                    <tr>
+                    <td style="padding: 6px;">email</td>
+                    <td style="padding: 6px;">${data.email_peminjam}</td>
+                    </tr>
+                    <tr>
+                    <td style="padding: 6px;">Nomor HP</td>
+                    <td style="padding: 6px;">${data.telepon_peminjam}</td>
+                    </tr>
+                    <tr>
+                    <td style="padding: 6px;">Kode barang dipinjam</td>
+                    <td style="padding: 6px;">${data.kode_barang}</td>
+                    </tr>
+                    <tr>
+                    <td style="padding: 6px;">Nama barang dipinjam</td>
+                    <td style="padding: 6px;">${data.nama_barang}</td>
+                    </tr>
+                    <tr>
+                    <td style="padding: 6px;">Total barang dipinjam</td>
+                    <td style="padding: 6px;">${data.total_qty_dipinjam}</td>
+                    </tr>
+                    <tr>
+                    <td style="padding: 6px;">Pinjaman pertama</td>
+                    <td style="padding: 6px;">${data.pinjaman_pertama}</td>
+                    </tr>
+                    <td style="padding: 6px;">Pinjaman terakhir</td>
+                    <td style="padding: 6px;">${data.pinjaman_terakhir}</td>
+                    </tr>
+                </tbody>
+              </table>`,
+      icon: 'info'
+    });
+  }
 
   function showUserDetail(data) {
     Swal.fire({
@@ -217,7 +307,11 @@
                     </tr>
                 </tbody>
               </table>`,
-      icon: 'info'
+      iconHtml: `
+         <img id="profilePhoto" src="<?= BASE_URL ?>public/assets/img/${data.img}" 
+                  alt="Foto Profil" class="rounded-circle border" 
+                  style="width: 120px; height: 120px; object-fit: cover;">
+      `
     });
   }
 
@@ -391,7 +485,7 @@
                         <div class="mb-3">
                           <label class="form-label">Status Barang</label><br>
                           <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="statusBarangUpdate" id="statusTrue" value="1" required>
+                            <input class="form-check-input" checked type="radio" name="statusBarangUpdate" id="statusTrue" value="1" required>
                             <label class="form-check-label" for="statusTrue">Tersedia</label>
                           </div>
                           <div class="form-check form-check-inline">
@@ -406,8 +500,11 @@
                       let formDataUpdate = {
                         nama_barang: $("#namaBarangUpdate").val(),
                         harga_beli: $("#hargaBarangUpdate").val(),
+                        jumlah_barang: $("#jumlahUpdate").val(),
                         status_barang: parseInt($('input[name="statusBarangUpdate"]:checked').val())
                       }
+                      console.log(formDataUpdate)
+                      console.log(response[0].id_barang)
                       $.ajax({
                         url: '<?= BASE_URL ?>'+'api/barang/update',
                         type: 'PATCH',
@@ -570,7 +667,7 @@
         console.log(response);
          Swal.fire({
               icon: 'success',
-              title: 'Pendaftaran Berhasil!',
+              title: 'Berhasil!',
               text: 'Barang Berhasil ditambah!',
           }).then((result) => {
             if (result.isConfirmed) {

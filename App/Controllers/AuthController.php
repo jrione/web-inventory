@@ -20,6 +20,7 @@ class AuthController{
                 $dataValid = $res->fetch(\PDO::FETCH_ASSOC);
                 $isPasswordValid=password_verify($data['password'],$dataValid['password']);
                 if($isPasswordValid){
+                    $_SESSION["user_id"] = $dataValid["user_id"];
                     $_SESSION["username"] = $data["username"];
                     $_SESSION["password"] = $data["password"];
                     $_SESSION["roles"] = $dataValid["roles"];
